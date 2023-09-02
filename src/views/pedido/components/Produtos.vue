@@ -5,7 +5,7 @@
                 {{ produto.nome }}
             </div>
             <div class="flex flex-grow justify-end px-4 font-bold">
-                <h5>{{ produto.preco }}</h5>
+                <h5>{{ MoneyFormat.format(produto.preco) }}</h5>
             </div>
             <div class="flex gap-2">
                 <button @click="adicionarItem(produto)" class="w-10 h-10 text-2xl font-bold text-white bg-blue-400 hover:bg-blue-500 shadow rounded-md">+</button>
@@ -23,20 +23,22 @@
 
     import ProdutoService from "../../../services/ProdutoService";
 
-    let produtos = ref<Produto[]>([
-        new Produto(1, "Coca-cola 2L", 10)
-    ]);
+    import { usePedidoStore } from "../../../stores/PedidoStore";
+
+    import { MoneyFormat } from "../../../utils/MoneyFormat";
+
+    let produtos = ref<Produto[]>([]);
 
     produtos.value = await ProdutoService.getProdutos();
 
-    console.log(produtos.value);
+    const store = usePedidoStore();
     
     const adicionarItem = (produto: Produto) => {
-        console.log("adicionando item: " + produto.id);
+        store.adicionarItem(produto);
     }
 
     const removerItem = (produto: Produto) => {
-        console.log("removendo item: " + produto.id);
+        store.removerItem(produto);
     }
 
 </script>
